@@ -1,58 +1,15 @@
-import express from "express";
-import fetch from "node-fetch";
-import cors from "cors";
-
-const app = express();
-app.use(cors());           
-app.use(express.json());
-
-// صفحة افتراضية
-app.get("/", (req, res) => {
-  res.send("✅ PRM4U Proxy API is running on Render!");
-});
-
-// جلب الخدمات
-app.get("/services", async (req, res) => {
-  try {
-    const response = await fetch("https://prm4u.com/api/v2", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        key: process.env.PEAKERR_API_KEY,
-        action: "services"
-      })
-    });
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+{
+  "name": "PRM4U-prox",
+  "version": "1.0.0",
+  "description": "Proxy API for PRM4U services using Express and Render",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2",
+    "cors": "^2.8.5"
   }
-});
-
-// إنشاء طلب شراء
-app.post("/order", async (req, res) => {
-  try {
-    const { service, link, quantity } = req.body;
-
-    const response = await fetch("https://prm4u.com/api/v2", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        key: process.env.PEAKERR_API_KEY,
-        action: "add",
-        service,
-        link,
-        quantity
-      })
-    });
-
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// تشغيل السيرفر
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
